@@ -1,0 +1,19 @@
+# Node
+node_modules/
+apps/web/node_modules/
+apps/web/dist/
+apps/web/.angular/
+apps/web/out-tsc/
+
+# .NET
+**/bin/
+**/obj/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Local env
+.env

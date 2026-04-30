@@ -1,0 +1,28 @@
+<header class="topbar">
+  <div>
+    <h1>autoVHC Automated Follow-Up Prototype</h1>
+    <p>Angular + .NET + Postgres mock workflow</p>
+  </div>
+  <div class="role-picker">
+    <label for="role">Role</label>
+    <select id="role" [ngModel]="role" (ngModelChange)="setRole($event)">
+      <option value="advisor">advisor</option>
+      <option value="manager">manager</option>
+      <option value="admin">admin</option>
+    </select>
+  </div>
+</header>
+
+<nav class="mainnav">
+  <a routerLink="/follow-up/automation">Dashboard</a>
+  <a routerLink="/follow-up/automation/eligible">Eligible</a>
+  <a routerLink="/follow-up/automation/service-team-activity">Activity</a>
+  <a routerLink="/follow-up/automation/advisor-actions">Advisor</a>
+  <a routerLink="/follow-up/automation/templates">Templates</a>
+  <a routerLink="/follow-up/automation/settings">Settings</a>
+  <a routerLink="/follow-up/automation/reports">Reports</a>
+</nav>
+
+<main>
+  <router-outlet />
+</main>
