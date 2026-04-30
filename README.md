@@ -1,46 +1,54 @@
 # autoVHC Automated Follow-Up Prototype
 
-Prototype stack:
-- Angular frontend: `apps/web`
-- ASP.NET Core API: `apps/api`
-- Postgres schema/seed: `apps/db`
+This repository contains a fully runnable prototype for automated follow-up workflows using Angular, ASP.NET Core, and Postgres.
 
-## What is implemented
-- Mock follow-up import flow (`/api/followup/import`) with normalization and eligibility states.
-- Reminder message creation and mock-send lifecycle.
-- Outbox with personalised tracking URLs.
-- Public customer routes through tokenized URL actions.
-- Advisor action queue with assign and mandatory close outcome API.
-- Reports: funnel, blocked reasons, SLA, 7-day opportunity.
-- Role-stub frontend routes for advisor/manager/admin.
+## Repository layout
+- `apps/web`: Angular UI and customer reminder pages.
+- `apps/api`: ASP.NET Core workflow API, mock source adapter, reporting endpoints.
+- `apps/db`: SQL migration and seed scripts.
+- `docs/governance`: Working rules, coding guidance, and PR structure.
+- `docs/product`: Product intent, capability boundaries, and architecture notes.
+- `docs/slivers`: Incremental delivery plans.
+- `docs/outputs`: Delivery evidence and completion notes.
+- `docs/review`: Reviewer onboarding and navigation.
 
-## Prerequisites
+## Prototype status
+Confirmed capability:
+- Imports follow-up items from a mocked core source.
+- Applies eligibility, suppression, and blocked reason logic.
+- Generates personalised customer reminder links and tracks CTA events.
+- Creates advisor actions with SLA and mandatory close outcomes.
+- Exposes funnel/SLA/blocked/7-day opportunity reporting.
+
+Out of scope:
+- Live provider messaging integration.
+- Production SSO integration.
+- Core follow-up write-back to external systems.
+
+## Run locally
+Prerequisites:
 - .NET SDK 10+
 - Node 22+
-- PostgreSQL local server reachable on `localhost:5432`
+- PostgreSQL listening on `localhost:5432`
 
-## Local setup
-1. Create database if needed:
+Run API:
 ```bash
-createdb autovhc_prototype
+dotnet run --project apps/api --urls http://127.0.0.1:5010
 ```
-2. Run API:
-```bash
-dotnet run --project apps/api
-```
-3. Install web dependencies and run Angular app:
+
+Run web app:
 ```bash
 cd apps/web
 npm install
-npm start
+npm start -- --host 127.0.0.1 --port 4300
 ```
-4. Open web UI: `http://localhost:4200`
 
-The API bootstraps schema and seed automatically from:
-- `apps/db/migrations/001_init.sql`
-- `apps/db/seed/001_seed.sql`
+Open:
+- Internal UI: `http://127.0.0.1:4300/follow-up/automation`
+- API root: `http://127.0.0.1:5010/`
 
-## Key UI routes
+## Key routes
+Internal:
 - `/follow-up/automation`
 - `/follow-up/automation/eligible`
 - `/follow-up/automation/service-team-activity`
@@ -49,14 +57,23 @@ The API bootstraps schema and seed automatically from:
 - `/follow-up/automation/settings`
 - `/follow-up/automation/reports`
 
-Public routes:
+Customer:
 - `/r/:trackingToken`
 - `/r/:trackingToken/callback`
 - `/r/:trackingToken/remind-later`
 - `/r/:trackingToken/already-repaired`
 - `/r/:trackingToken/stop`
 
+## Reviewer quick start
+1. Read `docs/review/review-start-here.md`.
+2. Read the PR narrative in `docs/outputs/S001/pr-description.md`.
+3. Read execution evidence in `docs/outputs/S001/completion-note.md`.
+4. Validate acceptance criteria in `docs/slivers/S001-plan.md`.
+
+## Security and data handling
+- No live credentials are stored in this repository.
+- API credentials and provider keys are backend-only by design.
+- Tracking links use opaque tokens and avoid customer PII.
+
 ## Notes
-- Messaging and core autoVHC write-back are mocked by design.
-- No customer PII is placed in tracking URLs.
-- This is a prototype workflow, not production-ready deployment.
+This implementation is a prototype. It demonstrates workflow behavior and reviewable architecture, not production readiness.
